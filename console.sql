@@ -1,7 +1,7 @@
 -- pokedex
 -- Привидение в 1НФ
 create table parse as
-select distinct unnest(string_to_array(substring(ability from 2 for length(ability) - 2), ', ')) as ability
+select distinct unnest(string_to_array(substring(abilities from 2 for length(abilities) - 2), ', ')) as ability
 from pokedex_csv;
 
 create table pokedex as
@@ -16,6 +16,8 @@ alter table pokedex
 -- Привидение в 2НФ
 
 -- create abilities
+alter table pokedex rename column pokedex_id to id;
+
 create table abilities as
 select id, ability
 from pokedex;
@@ -67,17 +69,15 @@ from b;
 
 drop table a, b;
 
-
-
 create table types as
-select id, type
+select id, pokedex.type
 from pokedex;
 
 alter table pokedex
     drop type;
 
 CREATE SEQUENCE type_id;
-alter table pokedex_x_type
+alter table types
     add column_3 int default nextval('type_id');
 
 
@@ -102,7 +102,6 @@ from trainer;
 alter table trainer
     drop friends_series;
 
-alter table trainer_csv rename to trainer;
 
 
 
